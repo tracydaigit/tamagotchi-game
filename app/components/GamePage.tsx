@@ -1,15 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Pet as PetType } from './WelcomePage';
 import Pet from './Pet';
 import FoodPanel from './FoodPanel';
 import PlayPanel from './PlayPanel';
 import StatsPanel from './StatsPanel';
 
+interface PetStats {
+  hunger: number;
+  happiness: number;
+  health: number;
+  lastFed: number;
+}
+
 interface GamePageProps {
   selectedPet: PetType;
   onBackToSelection: () => void;
-  petStats: any;
-  onUpdateStats: (updateFn: (prev: any) => any) => void;
+  petStats: PetStats;
+  onUpdateStats: (updateFn: (prev: PetStats) => PetStats) => void;
 }
 
 export default function GamePage({ selectedPet, onBackToSelection, petStats, onUpdateStats }: GamePageProps) {
@@ -20,7 +27,7 @@ export default function GamePage({ selectedPet, onBackToSelection, petStats, onU
     setFeedingAnimation(foodType);
     
     // Update pet stats based on food type and pet preferences
-    onUpdateStats((prev: any) => {
+    onUpdateStats((prev: PetStats) => {
       let hungerBoost = 0;
       let happinessBoost = 0;
       let healthBoost = 5; // Base health boost for all food
@@ -57,7 +64,7 @@ export default function GamePage({ selectedPet, onBackToSelection, petStats, onU
     setPlayAnimation(playType);
     
     // Update pet stats based on play type
-    onUpdateStats((prev: any) => {
+    onUpdateStats((prev: PetStats) => {
       let happinessBoost = 0;
       
       // Play-specific bonuses

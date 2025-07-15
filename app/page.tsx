@@ -4,14 +4,21 @@ import { useState, useEffect } from 'react';
 import WelcomePage, { Pet as PetType, availablePets } from './components/WelcomePage';
 import GamePage from './components/GamePage';
 
+interface PetStats {
+  hunger: number;
+  happiness: number;
+  health: number;
+  lastFed: number;
+}
+
 export default function TamagotchiGame() {
   const [currentPage, setCurrentPage] = useState<'welcome' | 'game'>('welcome');
   const [selectedPet, setSelectedPet] = useState<PetType | null>(null);
-  const [petStats, setPetStats] = useState<{[petId: string]: any}>({});
+  const [petStats, setPetStats] = useState<{[petId: string]: PetStats}>({});
 
   // Initialize stats for all pets
   useEffect(() => {
-    const initialStats: {[petId: string]: any} = {};
+    const initialStats: {[petId: string]: PetStats} = {};
     availablePets.forEach(pet => {
       initialStats[pet.id] = {
         hunger: 50,
@@ -42,7 +49,7 @@ export default function TamagotchiGame() {
   };
 
   // Update current pet's stats
-  const updateCurrentPetStats = (updateFn: (prev: any) => any) => {
+  const updateCurrentPetStats = (updateFn: (prev: PetStats) => PetStats) => {
     if (!selectedPet) return;
     setPetStats(prev => ({
       ...prev,
